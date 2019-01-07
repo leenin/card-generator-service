@@ -2,50 +2,82 @@ package server
 
 import (
 	"bytes"
-	"fmt"
+	"errors"
 	"image"
 	"image/png"
+	"io/ioutil"
 	"net/http"
+
+	"github.com/qiniu/api.v7/storage"
 )
 
-func composeImage(r *http.Request) (resultImg *image.RGBA, err error) {
-	// get model
-	m, err := requestToModel(r)
+type resultData struct {
+	img []byte
+	url string
+}
+
+func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
+	// get request body
+	if r.Header.Get("Content-Type") != "application/json" {
+		err = errors.New("it only accept application/json content")
+		return
+	}
+	rBody, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+
+	// json to model
+	m, err := jsonToModel(rBody)
 	if err != nil {
 		return
 	}
 
-	// get base image
-	baseImg, err := getImageFromURL(m.BaseImage)
+	// model json to sha1
+	hexString, err := modelToSha1(&m)
 	if err != nil {
 		return
 	}
-	resultImg = image.NewRGBA(baseImg.Bounds())
-	drawBg(resultImg, baseImg)
+	key := "card/" + hexString + ".png"
 
-	// draw image
-	var errchs = make([]chan error, len(m.Images)+len(m.Texts))
-	for n, imageParam := range m.Images {
-		errchs[n] = make(chan error)
-		go drawImage(resultImg, imageParam, errchs[n])
+	// get qiniu config
+	qcfg := QiniuCfg{}
+	err = getQiniuCfg(&qcfg)
+	if err != nil {
+		return
 	}
 
-	// draw text
-	for i, textParam := range m.Texts {
-		errchs[len(m.Images)+i] = make(chan error)
-		go drawText(resultImg, textParam, errchs[len(m.Images)+i])
+	// get file info
+	fileInfo, err := getFileInfoByKey(&qcfg, key)
+	if err != nil {
+		return
 	}
 
-	for _, errch := range errchs {
-		if err = <-errch; err != nil {
+	domain := qcfg.Domain
+	publicAccessURL := storage.MakePublicURL(domain, key)
+	rData.url = publicAccessURL
+
+	var resultImg image.Image
+	if fileInfo.PutTime == 0 {
+		resultImg, err = composeImage(&m)
+		// write png to buffer
+		buffer := new(bytes.Buffer)
+		err = png.Encode(buffer, resultImg)
+		rData.img = buffer.Bytes()
+
+		_, err = uploadFile(&qcfg, rData.img, key)
+	} else if !onlyURL {
+		resultImg, err = getImageFromURL(rData.url)
+		if err != nil {
 			return
 		}
+		// write png to buffer
+		buffer := new(bytes.Buffer)
+		err = png.Encode(buffer, resultImg)
+		rData.img = buffer.Bytes()
 	}
-
 	return
 }
 
-func ImageHandler(w http.ResponseWriter, r *http.Request) {
+func ImagePngHandler(w http.ResponseWriter, r *http.Request) {
 	// error
 	defer func() {
 		if err := recover(); err != nil {
@@ -53,42 +85,34 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	// compose image
-	resultImg, err := composeImage(r)
+	rData, err := service(r, false)
 	if err != nil {
 		panic(err)
 	}
 
-	// write png to buffer
-	buffer := new(bytes.Buffer)
-	err = png.Encode(buffer, resultImg)
 	if err != nil {
 		panic(err)
 	}
 
 	// response
 	w.Header().Add("Content-Type", "image/png")
-	w.Write(buffer.Bytes())
+	w.Write(rData.img)
 }
 
-func ImageToQiniuHandler(w http.ResponseWriter, r *http.Request) {
-	// compose image
-	resultImg, err := composeImage(r)
-	if err != nil {
-		panic(err)
-	}
-
-	// upload to qiniu
-	fmt.Println(resultImg)
-
-	// response
-	var data = map[string]string{"url": ""}
-	new(result).successData(data)
-
+func ImageURLHandler(w http.ResponseWriter, r *http.Request) {
 	// error
 	defer func() {
 		if err := recover(); err != nil {
 			new(result).fail(-1, err.(error).Error()).responseWrite(w)
 		}
 	}()
+
+	rData, err := service(r, true)
+	if err != nil {
+		panic(err)
+	}
+
+	// response
+	var data = map[string]string{"url": rData.url}
+	new(result).successData(data).responseWrite(w)
 }

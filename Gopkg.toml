@@ -40,3 +40,7 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/validator.v2"
+
+[[constraint]]
+  name = "github.com/qiniu/api.v7"
+  version = "7.2.5"

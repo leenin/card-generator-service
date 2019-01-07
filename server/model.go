@@ -1,10 +1,10 @@
 package server
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
-	"net/http"
 
 	validator "gopkg.in/validator.v2"
 )
@@ -25,7 +25,7 @@ type TextParam struct {
 	X       int     `json:"x"`
 	Y       int     `json:"y"`
 	Anchor  byte    `json:"anchor" validate:"min=0,max=1"`
-	Color   []byte  `json:"color" validate:"min=3,max=4"`
+	Color   []int   `json:"color" validate:"min=3,max=4"`
 }
 
 type Model struct {
@@ -34,18 +34,23 @@ type Model struct {
 	Texts     []TextParam  `json:"texts"`
 }
 
-func requestToModel(r *http.Request) (m Model, err error) {
-	if r.Header.Get("Content-Type") != "application/json" {
-		err = errors.New("it only accept application/json content")
-		return
-	}
-	rBody, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+func jsonToModel(rBody []byte) (m Model, err error) {
 	if !json.Valid(rBody) {
 		err = errors.New("incorrect json format")
 		return
 	}
 	json.Unmarshal(rBody, &m)
 	err = validator.Validate(m)
+	return
+}
+
+func modelToSha1(m *Model) (hexString string, err error) {
+	jsonBytes, err := json.Marshal(m)
+	if err != nil {
+		return
+	}
+	sha1 := sha1.New()
+	sha1.Write(jsonBytes)
+	hexString = hex.EncodeToString(sha1.Sum([]byte("")))
 	return
 }

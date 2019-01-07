@@ -48,7 +48,7 @@ func drawText(dst *image.RGBA, textParam TextParam, errch chan error) {
 	} else {
 		opacity = 255
 	}
-	c.SetSrc(image.NewUniform(&color.NRGBA{textParam.Color[0], textParam.Color[1], textParam.Color[2], opacity}))
+	c.SetSrc(image.NewUniform(&color.NRGBA{byte(textParam.Color[0]), byte(textParam.Color[1]), byte(textParam.Color[2]), opacity}))
 
 	var x fixed.Int26_6
 	switch textParam.Anchor {

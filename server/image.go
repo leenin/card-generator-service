@@ -35,6 +35,37 @@ func (c *circle) At(x, y int) color.Color {
 	return color.Alpha{0}
 }
 
+func composeImage(m *Model) (resultImg *image.RGBA, err error) {
+	// get base image
+	baseImg, err := getImageFromURL(m.BaseImage)
+	if err != nil {
+		return
+	}
+	resultImg = image.NewRGBA(baseImg.Bounds())
+	drawBg(resultImg, baseImg)
+
+	// draw image
+	var errchs = make([]chan error, len(m.Images)+len(m.Texts))
+	for n, imageParam := range m.Images {
+		errchs[n] = make(chan error)
+		go drawImage(resultImg, imageParam, errchs[n])
+	}
+
+	// draw text
+	for i, textParam := range m.Texts {
+		errchs[len(m.Images)+i] = make(chan error)
+		go drawText(resultImg, textParam, errchs[len(m.Images)+i])
+	}
+
+	for _, errch := range errchs {
+		if err = <-errch; err != nil {
+			return
+		}
+	}
+
+	return
+}
+
 func getImageFromURL(url string) (img image.Image, err error) {
 	resp, err := http.Get(url)
 	if err != nil {

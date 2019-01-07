@@ -22,6 +22,34 @@
   revision = "83c6a9932646f83e3267f353373d47347b6036b2"
 
 [[projects]]
+  digest = "1:6dbe890cc71e1d2a47c805d1d516079c410ba141afd924d19947a2d8aee5e8d8"
+  name = "github.com/qiniu/api.v7"
+  packages = [
+    ".",
+    "auth/qbox",
+    "cdn",
+    "conf",
+    "rtc",
+    "storage",
+  ]
+  pruneopts = "UT"
+  revision = "bc6998c1186aafa0eadc6396d28fc7e77a594a2a"
+  version = "v7.2.5"
+
+[[projects]]
+  digest = "1:2aab414b381b52e8a3fd14ad9f9be657680a90df2699ca15861efe0eddbf040a"
+  name = "github.com/qiniu/x"
+  packages = [
+    "bytes.v7",
+    "bytes.v7/seekable",
+    "reqid.v7",
+    "xlog.v7",
+  ]
+  pruneopts = "UT"
+  revision = "946c4a16076d6d98aeb78619e2bd4012357f7228"
+  version = "v7.0.8"
+
+[[projects]]
   branch = "master"
   digest = "1:6d674a768fd27ad126eb8357ebbc14cb5b000badd62d4b7cbe403abb231e099e"
   name = "golang.org/x/image"
@@ -33,12 +61,32 @@
   revision = "cd38e8056d9b27bb2f265effa37fb0ea6b8a7f0f"
 
 [[projects]]
+  branch = "master"
+  digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  pruneopts = "UT"
+  revision = "927f97764cc334a6575f4b7a1584a147864d5723"
+
+[[projects]]
   branch = "v2"
   digest = "1:b6539350da50de0d3c9b83ae587c06b89be9cb5750443bdd887f1c4077f57776"
   name = "gopkg.in/validator.v2"
   packages = ["."]
   pruneopts = "UT"
   revision = "135c24b11c19e52befcae2ec3fca5d9b78c4e98e"
+
+[[projects]]
+  digest = "1:3b5e7235c98bd161d63467d2dde26c630d598b123e4a1ed810f9026c60c7b6c8"
+  name = "qiniupkg.com/x"
+  packages = [
+    "bytes.v7",
+    "log.v7",
+    "reqid.v7",
+  ]
+  pruneopts = "UT"
+  revision = "946c4a16076d6d98aeb78619e2bd4012357f7228"
+  version = "v7.0.8"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -47,6 +95,8 @@
     "github.com/golang/freetype",
     "github.com/golang/freetype/truetype",
     "github.com/nfnt/resize",
+    "github.com/qiniu/api.v7",
+    "golang.org/x/image/math/fixed",
     "gopkg.in/validator.v2",
   ]
   solver-name = "gps-cdcl"

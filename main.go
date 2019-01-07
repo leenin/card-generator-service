@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/image", server.ImageHandler)
-	http.HandleFunc("/image2qiniu", server.ImageToQiniuHandler)
+	http.HandleFunc("/image/png", server.ImagePngHandler)
+	http.HandleFunc("/image/url", server.ImageURLHandler)
 
 	http.ListenAndServe(":8000", nil)
 }

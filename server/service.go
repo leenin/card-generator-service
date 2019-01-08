@@ -51,7 +51,11 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 		err = png.Encode(buffer, resultImg)
 		rData.img = buffer.Bytes()
 
-		_, err = uploadFile(qcfg, rData.img, key)
+		if onlyURL {
+			uploadFile(qcfg, rData.img, key)
+		} else {
+			go uploadFile(qcfg, rData.img, key)
+		}
 	} else if !onlyURL {
 		resultImg, err = getImageFromURL(rData.url)
 		if err != nil {

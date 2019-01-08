@@ -1,4 +1,4 @@
-FROM golang:1.8
+FROM golang:1.11-alpine
 
 RUN mkdir -p /go/src/card-service
 

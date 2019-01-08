@@ -18,19 +18,20 @@ type QiniuCfg struct {
 	Bucket    string `json:"bucket"`
 }
 
-func getQiniuCfg() (qcfg *QiniuCfg, err error) {
+func getQiniuCfg() (*QiniuCfg, error) {
 	fp, err := filepath.Abs("config/qiniu.json")
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	qiniuCfgJSONBytes, err := ioutil.ReadFile(fp)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	json.Unmarshal(qiniuCfgJSONBytes, qcfg)
-	return
+	qcfg := QiniuCfg{}
+	json.Unmarshal(qiniuCfgJSONBytes, &qcfg)
+	return &qcfg, nil
 }
 
 func getFileInfoByKey(qcfg *QiniuCfg, key string) (fileInfo storage.FileInfo, err error) {

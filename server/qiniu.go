@@ -34,7 +34,7 @@ func getQiniuCfg() (*QiniuCfg, error) {
 	return &qcfg, nil
 }
 
-func getFileInfoByKey(qcfg *QiniuCfg, key string) (*storage.FileInfo, error) {
+func getFileInfoByKey(qcfg *QiniuCfg, key string) (fileInfo storage.FileInfo) {
 	mac := qbox.NewMac(qcfg.AccessKey, qcfg.SecretKey)
 	cfg := storage.Config{
 		// 是否使用https域名进行资源管理
@@ -45,11 +45,8 @@ func getFileInfoByKey(qcfg *QiniuCfg, key string) (*storage.FileInfo, error) {
 	//cfg.Zone=&storage.ZoneHuabei
 	bucketManager := storage.NewBucketManager(mac, &cfg)
 
-	fileInfo, err := bucketManager.Stat(qcfg.Bucket, key)
-	if err != nil {
-		return nil, err
-	}
-	return &fileInfo, nil
+	fileInfo, _ = bucketManager.Stat(qcfg.Bucket, key)
+	return
 }
 
 func uploadFile(qcfg *QiniuCfg, data []byte, key string) (ret storage.PutRet, err error) {

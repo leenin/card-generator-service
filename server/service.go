@@ -2,8 +2,6 @@ package server
 
 import (
 	"bytes"
-	"errors"
-	"fmt"
 	"image"
 	"image/png"
 	"io/ioutil"
@@ -13,13 +11,6 @@ import (
 )
 
 func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
-	// get request body
-	if r.Header.Get("Content-Type") != "application/json" {
-		fmt.Println(r.Header)
-		err = errors.New("it only accept application/json content, but get " + r.Header.Get("Content-Type"))
-		return
-	}
-
 	rBody, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -46,17 +37,14 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 	}
 
 	// get file info
-	fileInfo, err := getFileInfoByKey(qcfg, key)
-	if err != nil {
-		return
-	}
+	fileInfo := getFileInfoByKey(qcfg, key)
 
 	domain := qcfg.Domain
 	publicAccessURL := storage.MakePublicURL(domain, key)
 	rData.url = publicAccessURL
 
 	var resultImg image.Image
-	if fileInfo == nil {
+	if fileInfo.PutTime == 0 {
 		resultImg, err = composeImage(&m)
 		// write png to buffer
 		buffer := new(bytes.Buffer)

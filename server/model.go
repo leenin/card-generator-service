@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	validator "gopkg.in/validator.v2"
 )
@@ -38,7 +37,6 @@ type Model struct {
 func jsonToModel(rBody []byte) (m Model, err error) {
 	if !json.Valid(rBody) {
 		err = errors.New("incorrect json format")
-		fmt.Println(string(rBody))
 		return
 	}
 	json.Unmarshal(rBody, &m)

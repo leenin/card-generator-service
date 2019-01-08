@@ -13,6 +13,9 @@ import (
 func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 	rBody, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
+	if err != nil {
+		return
+	}
 
 	// json to model
 	m, err := jsonToModel(rBody)

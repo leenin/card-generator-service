@@ -3,9 +3,7 @@ package server
 import (
 	"bytes"
 	"context"
-	"encoding/json"
-	"io/ioutil"
-	"path/filepath"
+	"os"
 
 	"github.com/qiniu/api.v7/auth/qbox"
 	"github.com/qiniu/api.v7/storage"
@@ -19,18 +17,11 @@ type QiniuCfg struct {
 }
 
 func getQiniuCfg() (*QiniuCfg, error) {
-	fp, err := filepath.Abs("config/qiniu.json")
-	if err != nil {
-		return nil, err
-	}
-
-	qiniuCfgJSONBytes, err := ioutil.ReadFile(fp)
-	if err != nil {
-		return nil, err
-	}
-
 	qcfg := QiniuCfg{}
-	json.Unmarshal(qiniuCfgJSONBytes, &qcfg)
+	qcfg.Domain = os.Getenv("QINIU_DOMAIN")
+	qcfg.AccessKey = os.Getenv("QINIU_ACCESS_KEY")
+	qcfg.SecretKey = os.Getenv("QINIU_SECRET_KEY")
+	qcfg.Bucket = os.Getenv("QINIU_BUCKET")
 	return &qcfg, nil
 }
 

@@ -34,14 +34,13 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 	key := "card/" + hexString + ".png"
 
 	// get qiniu config
-	qcfg := QiniuCfg{}
-	err = getQiniuCfg(&qcfg)
+	qcfg, err := getQiniuCfg()
 	if err != nil {
 		return
 	}
 
 	// get file info
-	fileInfo, err := getFileInfoByKey(&qcfg, key)
+	fileInfo, err := getFileInfoByKey(qcfg, key)
 	if err != nil {
 		return
 	}
@@ -58,7 +57,7 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 		err = png.Encode(buffer, resultImg)
 		rData.img = buffer.Bytes()
 
-		_, err = uploadFile(&qcfg, rData.img, key)
+		_, err = uploadFile(qcfg, rData.img, key)
 	} else if !onlyURL {
 		resultImg, err = getImageFromURL(rData.url)
 		if err != nil {

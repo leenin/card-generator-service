@@ -18,7 +18,7 @@ type QiniuCfg struct {
 	Bucket    string `json:"bucket"`
 }
 
-func getQiniuCfg(qcfg *QiniuCfg) (err error) {
+func getQiniuCfg() (qcfg *QiniuCfg, err error) {
 	fp, err := filepath.Abs("config/qiniu.json")
 	if err != nil {
 		return
@@ -29,7 +29,7 @@ func getQiniuCfg(qcfg *QiniuCfg) (err error) {
 		return
 	}
 
-	json.Unmarshal(qiniuCfgJSONBytes, &qcfg)
+	json.Unmarshal(qiniuCfgJSONBytes, qcfg)
 	return
 }
 

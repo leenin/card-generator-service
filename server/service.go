@@ -2,8 +2,6 @@ package server
 
 import (
 	"bytes"
-	"errors"
-	"fmt"
 	"image"
 	"image/png"
 	"io/ioutil"
@@ -13,12 +11,6 @@ import (
 )
 
 func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
-	// get request body
-	if r.Header.Get("Content-Type") != "application/json" {
-		fmt.Println(r.Header)
-		err = errors.New("it only accept application/json content, but get " + r.Header.Get("Content-Type"))
-		return
-	}
 	rBody, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 

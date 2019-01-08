@@ -15,7 +15,7 @@ import (
 )
 
 func drawText(dst *image.RGBA, textParam TextParam, errch chan error) {
-	fontPath, err := filepath.Abs("./server/font/" + textParam.Font + ".ttf")
+	fontPath, err := filepath.Abs("font/" + textParam.Font + ".ttf")
 	if err != nil {
 		errch <- errors.New("Text " + textParam.Content + ", " + textParam.Font + " font not exists")
 		return

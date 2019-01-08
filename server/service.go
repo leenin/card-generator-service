@@ -44,7 +44,7 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 	rData.url = publicAccessURL
 
 	var resultImg image.Image
-	if fileInfo.PutTime == 0 {
+	if fileInfo == nil {
 		resultImg, err = composeImage(&m)
 		// write png to buffer
 		buffer := new(bytes.Buffer)

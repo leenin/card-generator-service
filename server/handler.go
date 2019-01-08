@@ -22,10 +22,6 @@ func ImagePngHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	if err != nil {
-		panic(err)
-	}
-
 	// response
 	w.Header().Add("Content-Type", "image/png")
 	w.Write(rData.img)

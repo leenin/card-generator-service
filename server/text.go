@@ -23,13 +23,13 @@ func drawText(dst *image.RGBA, textParam TextParam, errch chan error) {
 
 	fontTypes, err := ioutil.ReadFile(fontPath)
 	if err != nil {
-		errch <- err
+		errch <- errors.New("Text " + textParam.Content + ", " + err.Error())
 		return
 	}
 
 	font, err := freetype.ParseFont(fontTypes)
 	if err != nil {
-		errch <- err
+		errch <- errors.New("Text " + textParam.Content + ", " + err.Error())
 		return
 	}
 
@@ -81,7 +81,7 @@ func drawText(dst *image.RGBA, textParam TextParam, errch chan error) {
 
 	_, err = c.DrawString(textParam.Content, pt)
 	if err != nil {
-		errch <- err
+		errch <- errors.New("Text " + textParam.Content + ", " + err.Error())
 		return
 	}
 

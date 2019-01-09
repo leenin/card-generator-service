@@ -22,14 +22,11 @@
   revision = "83c6a9932646f83e3267f353373d47347b6036b2"
 
 [[projects]]
-  digest = "1:6dbe890cc71e1d2a47c805d1d516079c410ba141afd924d19947a2d8aee5e8d8"
+  digest = "1:dc9c8f670cf08cd8fc4b633b4ee9dbc01e7a386cab9e215e9977556a809b0092"
   name = "github.com/qiniu/api.v7"
   packages = [
-    ".",
     "auth/qbox",
-    "cdn",
     "conf",
-    "rtc",
     "storage",
   ]
   pruneopts = "UT"
@@ -95,7 +92,8 @@
     "github.com/golang/freetype",
     "github.com/golang/freetype/truetype",
     "github.com/nfnt/resize",
-    "github.com/qiniu/api.v7",
+    "github.com/qiniu/api.v7/auth/qbox",
+    "github.com/qiniu/api.v7/storage",
     "golang.org/x/image/math/fixed",
     "gopkg.in/validator.v2",
   ]

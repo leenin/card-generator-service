@@ -34,17 +34,17 @@ type Model struct {
 	Texts     []TextParam  `json:"texts"`
 }
 
-func jsonToModel(rBody []byte) (m Model, err error) {
+func (m *Model) fromJSONBytes(rBody []byte) (err error) {
 	if !json.Valid(rBody) {
 		err = errors.New("incorrect json format")
 		return
 	}
-	json.Unmarshal(rBody, &m)
+	json.Unmarshal(rBody, m)
 	err = validator.Validate(m)
 	return
 }
 
-func modelToSha1(m *Model) (hexString string, err error) {
+func (m *Model) toSha1() (hexString string, err error) {
 	jsonBytes, err := json.Marshal(m)
 	if err != nil {
 		return

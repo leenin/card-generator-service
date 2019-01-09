@@ -1,8 +1,9 @@
 package main
 
 import (
-	"card-service/server"
 	"net/http"
+
+	"github.com/leenin/card-generator-service/server"
 )
 
 func main() {

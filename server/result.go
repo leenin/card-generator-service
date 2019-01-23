@@ -7,18 +7,16 @@ import (
 )
 
 type result struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
+	Code    int         `json:"code,omitempty"`
+	Message string      `json:"message,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
 func (r *result) success() *result {
-	r.Message = "success"
 	return r
 }
 
 func (r *result) successData(data interface{}) *result {
-	r.Message = "success"
 	r.Data = data
 	return r
 }

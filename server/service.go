@@ -47,9 +47,15 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 	var resultImg image.Image
 	if fileInfo.PutTime == 0 {
 		resultImg, err = composeImage(m)
+		if err != nil {
+			return
+		}
 		// write png to buffer
 		buffer := new(bytes.Buffer)
 		err = png.Encode(buffer, resultImg)
+		if err != nil {
+			return
+		}
 		rData.img = buffer.Bytes()
 
 		if onlyURL {
@@ -65,6 +71,9 @@ func service(r *http.Request, onlyURL bool) (rData resultData, err error) {
 		// write png to buffer
 		buffer := new(bytes.Buffer)
 		err = png.Encode(buffer, resultImg)
+		if err != nil {
+			return
+		}
 		rData.img = buffer.Bytes()
 	}
 	return

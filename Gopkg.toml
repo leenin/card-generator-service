@@ -44,3 +44,7 @@
 [[constraint]]
   name = "github.com/qiniu/api.v7"
   version = "7.2.5"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/skip2/go-qrcode"

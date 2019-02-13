@@ -45,7 +45,7 @@ func composeImage(m *Model) (resultImg *image.RGBA, err error) {
 	drawBg(resultImg, baseImg)
 
 	// draw image
-	var errchs = make([]chan error, len(m.Images)+len(m.Texts))
+	var errchs = make([]chan error, len(m.Images)+len(m.Texts)+len(m.Qrcodes))
 	for n, imageParam := range m.Images {
 		errchs[n] = make(chan error)
 		go drawImage(resultImg, imageParam, errchs[n])
@@ -55,6 +55,12 @@ func composeImage(m *Model) (resultImg *image.RGBA, err error) {
 	for i, textParam := range m.Texts {
 		errchs[len(m.Images)+i] = make(chan error)
 		go drawText(resultImg, textParam, errchs[len(m.Images)+i])
+	}
+
+	// draw qrcode
+	for o, qrcodeParam := range m.Qrcodes {
+		errchs[len(m.Images)+len(m.Texts)+o] = make(chan error)
+		go drawQrcode(resultImg, qrcodeParam, errchs[len(m.Images)+len(m.Texts)+o])
 	}
 
 	for _, errch := range errchs {

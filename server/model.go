@@ -28,10 +28,18 @@ type TextParam struct {
 	Color   []int   `json:"color" validate:"min=3,max=4"`
 }
 
+type QrcodeParam struct {
+	Content string `json:"content" validate:"nonzero"`
+	X       int    `json:"x"`
+	Y       int    `json:"y"`
+	Size    uint   `json:"size" validate:"nonzero"`
+}
+
 type Model struct {
-	BaseImage string       `json:"base_image" validate:"nonzero"`
-	Images    []ImageParam `json:"images"`
-	Texts     []TextParam  `json:"texts"`
+	BaseImage string        `json:"base_image" validate:"nonzero"`
+	Images    []ImageParam  `json:"images"`
+	Texts     []TextParam   `json:"texts"`
+	Qrcodes   []QrcodeParam `json:"qrcodes"`
 }
 
 func (m *Model) fromJSONBytes(rBody []byte) (err error) {

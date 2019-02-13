@@ -48,6 +48,18 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:7439e1e9a33b9d7d3eb7048fe50851a47186fd82d0fc6c481f749fb2c9901f61"
+  name = "github.com/skip2/go-qrcode"
+  packages = [
+    ".",
+    "bitset",
+    "reedsolomon",
+  ]
+  pruneopts = "UT"
+  revision = "dc11ecdae0a9889dc81a343585516404e8dc6ead"
+
+[[projects]]
+  branch = "master"
   digest = "1:6d674a768fd27ad126eb8357ebbc14cb5b000badd62d4b7cbe403abb231e099e"
   name = "golang.org/x/image"
   packages = [
@@ -94,6 +106,7 @@
     "github.com/nfnt/resize",
     "github.com/qiniu/api.v7/auth/qbox",
     "github.com/qiniu/api.v7/storage",
+    "github.com/skip2/go-qrcode",
     "golang.org/x/image/math/fixed",
     "gopkg.in/validator.v2",
   ]

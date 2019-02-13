@@ -4,16 +4,17 @@ import (
 	"image"
 	"image/draw"
 
-	qrcode "github.com/skip2/go-qrcode"
+	"github.com/boombuler/barcode"
+	"github.com/boombuler/barcode/qr"
 )
 
 func drawQrcode(dst *image.RGBA, qrcodeParam QrcodeParam, errch chan error) {
-	qrcode, err := qrcode.New(qrcodeParam.Content, qrcode.Medium)
+	img, err := qr.Encode(qrcodeParam.Content, qr.M, qr.Auto)
 	if err != nil {
 		errch <- err
 		return
 	}
-	img := qrcode.Image(int(qrcodeParam.Size))
+	img, err = barcode.Scale(img, int(qrcodeParam.Size), int(qrcodeParam.Size))
 	if err != nil {
 		errch <- err
 		return

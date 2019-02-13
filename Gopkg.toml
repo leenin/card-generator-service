@@ -48,3 +48,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/skip2/go-qrcode"
+
+[[constraint]]
+  name = "github.com/boombuler/barcode"
+  version = "1.0.0"

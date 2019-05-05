@@ -1,0 +1,208 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "工具库",
+    "contact": {
+      "name": "leen"
+    },
+    "version": "1.0"
+  },
+  "basePath": "/",
+  "host": "api.linyier.com",
+  "tags": [
+    {
+      "name": "卡片生成",
+      "description": "Image Controller"
+    }
+  ],
+  "paths": {
+    "/card/image/url": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "description": "cardDTO",
+            "name": "cardDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CardDTO"
+            }
+          }
+        ],
+        "summary": "图片生成",
+        "operationId": "imageUrlUsingPOST",
+        "tags": [
+          "卡片生成"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ObjectResult«UrlVO»"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ObjectResult«UrlVO»": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/UrlVO",
+          "description": "数据体"
+        }
+      },
+      "title": "ObjectResult«UrlVO»",
+      "type": "object"
+    },
+    "UrlVO": {
+      "title": "UrlVO",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "图片链接",
+          "type": "string"
+        }
+      }
+    },
+    "CardDTO": {
+      "title": "CardDTO",
+      "type": "object",
+      "properties": {
+        "base_image": {
+          "type": "string",
+          "description": "背景图片"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardDTO.Image"
+          },
+          "description": "图片列表"
+        },
+        "texts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardDTO.Text"
+          },
+          "description": "文字列表"
+        },
+        "qrcodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardDTO.Qrcode"
+          },
+          "description": "二维码列表"
+        }
+      }
+    },
+    "CardDTO.Image": {
+      "title": "CardDTO.Image",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "图片链接"
+        },
+        "width": {
+          "type": "integer",
+          "description": "宽度",
+          "example": 100
+        },
+        "height": {
+          "type": "integer",
+          "description": "高度",
+          "example": 100
+        },
+        "x": {
+          "type": "integer",
+          "description": "x坐标",
+          "example": 100
+        },
+        "y": {
+          "type": "integer",
+          "description": "y坐标",
+          "example": 100
+        },
+        "clip": {
+          "type": "integer",
+          "description": "裁剪模式，0 (不裁剪)、1 (圆形)",
+          "example": 0
+        }
+      }
+    },
+    "CardDTO.Text": {
+      "title": "CardDTO.Text",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "文字内容"
+        },
+        "size": {
+          "type": "integer",
+          "description": "文字大小",
+          "example": 28
+        },
+        "font": {
+          "type": "string",
+          "description": "文字字体",
+          "example": "PingFang-SC-Regular"
+        },
+        "x": {
+          "type": "integer",
+          "description": "x坐标",
+          "example": 100
+        },
+        "y": {
+          "type": "integer",
+          "description": "y坐标",
+          "example": 100
+        },
+        "color": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "颜色，rgb或者rgba数组, 最高[256,256,256,100]",
+          "example": [
+            59,
+            44,
+            53
+          ]
+        },
+        "anchor": {
+          "type": "integer",
+          "description": "定位点位置，0 (左上)、1 (中上)",
+          "example": 0
+        }
+      }
+    },
+    "CardDTO.Qrcode": {
+      "title": "CardDTO.Qrcode",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "二维码内容"
+        },
+        "size": {
+          "type": "integer",
+          "description": "二维码大小",
+          "example": 100
+        },
+        "x": {
+          "type": "integer",
+          "description": "x坐标",
+          "example": 100
+        },
+        "y": {
+          "type": "integer",
+          "description": "y坐标",
+          "example": 100
+        }
+      }
+    }
+  }
+}

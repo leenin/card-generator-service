@@ -9,6 +9,7 @@ import (
 func main() {
 	http.HandleFunc("/image/png", server.ImagePngHandler)
 	http.HandleFunc("/image/url", server.ImageURLHandler)
+	http.HandleFunc("/v2/api-docs", server.ApiDocsHandler)
 
 	http.ListenAndServe(":8000", nil)
 }
